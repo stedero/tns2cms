@@ -12,8 +12,8 @@ import (
 
 func main() {
 	directoryNamer := lib.ParseCommandLine()
-	lib.CreateDirIfNotExist(directoryNamer.OutDir)
-	files, _ := ioutil.ReadDir(directoryNamer.InDir)
+	lib.CreateDirIfNotExist(directoryNamer.OutDir())
+	files, _ := ioutil.ReadDir(directoryNamer.InDir())
 	counter := lib.NewCounter(len(files))
 	for _, file := range files {
 		if lib.Accept(file) {

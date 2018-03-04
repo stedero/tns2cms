@@ -5,11 +5,6 @@ import (
 	"os"
 )
 
-type DirectoryNamer struct {
-	InDir  string
-	OutDir string
-}
-
 func ParseCommandLine() *DirectoryNamer {
 	if len(os.Args) != 3 {
 		Usage()
@@ -19,13 +14,9 @@ func ParseCommandLine() *DirectoryNamer {
 			fmt.Fprintf(os.Stderr, "%s is not an existing directory\n", indir)
 			exit()
 		}
-		return &DirectoryNamer{indir, outdir}
+		return NewDirectoryNamer(indir, outdir)
 	}
-	return &DirectoryNamer{}
-}
-
-func (directoryNamer *DirectoryNamer) NewFilenamer(file os.FileInfo) *Filenamer {
-	return &Filenamer{directoryNamer.InDir, directoryNamer.OutDir, file}
+	return NewDirectoryNamer("", "")
 }
 
 func Usage() {
