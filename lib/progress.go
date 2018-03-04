@@ -19,18 +19,10 @@ func NewCounter(total int) *Counter {
 
 func (counter *Counter) Next() {
 	counter.count += 1
-	todo := counter.total - counter.count
-	perc := 100 - (todo / max(counter.total/100, 1))
-	if perc == counter.next {
-		counter.next = perc + granularity
+	todo := float64(counter.total - counter.count)
+	perc := int(100.0 - (todo / (float64(counter.total) / 100.0)))
+	if int(perc) >= counter.next {
+		counter.next += granularity
 		fmt.Println(fmt.Sprintf("%d%% done", perc))
-	}
-}
-
-func max(x int, y int) int {
-	if x > y {
-		return x
-	} else {
-		return y
 	}
 }
