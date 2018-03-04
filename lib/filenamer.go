@@ -16,7 +16,7 @@ type Filenamer struct {
 }
 
 func Accept(file os.FileInfo) bool {
-	return filepath.Ext(file.Name()) == extension
+	return strings.EqualFold(filepath.Ext(file.Name()), extension)
 }
 
 func (fileNamer *Filenamer) InputFilename() string {
@@ -28,6 +28,6 @@ func (fileNamer *Filenamer) OutputFilename() string {
 }
 
 func (fileNamer *Filenamer) MetaFilename() string {
-	name := strings.TrimSuffix(fileNamer.file.Name(), extension)
+	name := strings.TrimSuffix(fileNamer.file.Name(), filepath.Ext(fileNamer.file.Name()))
 	return filepath.Join(fileNamer.outdir, name+meta_file_suffix)
 }
