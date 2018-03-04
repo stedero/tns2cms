@@ -2,7 +2,7 @@
 // Every TNS article is stored in a separate XML file.
 // Metadata is created by extracting and converting data from a TNS article
 // and store that in a separate XML file that complies with the JAVA properties
-// file DTD.
+// file DTD (http://java.sun.com/dtd/properties.dtd).
 package main
 
 import (
