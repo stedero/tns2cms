@@ -17,7 +17,7 @@ type Entry struct {
 	Value string `xml:",innerxml"`
 }
 
-// Transform a TNS article into meta data XML
+// NewMetaData transforms a TNS article into meta data XML.
 func NewMetaData(tnsArticle *TnsArticle) []byte {
 	var props Properties
 	props.add("type", "cm:content")

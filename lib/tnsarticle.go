@@ -39,7 +39,7 @@ type TnsArticle struct {
 	} `xml:"tnsarticleinfo"`
 }
 
-// Transform a TNS article in XML into an internal structure
+// NewTnsArticle transforms a TNS article in XML into an internal structure.
 func NewTnsArticle(data []byte) *TnsArticle {
 	var tnsArticle TnsArticle
 	err := xml.Unmarshal(data, &tnsArticle)
