@@ -21,7 +21,7 @@ func (counter *Counter) Next() {
 	counter.count += 1
 	todo := float64(counter.total - counter.count)
 	perc := int(100.0 - (todo / (float64(counter.total) / 100.0)))
-	if int(perc) >= counter.next {
+	if perc >= counter.next {
 		counter.next += granularity
 		fmt.Println(fmt.Sprintf("%d%% done", perc))
 	}
