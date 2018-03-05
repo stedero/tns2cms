@@ -28,6 +28,9 @@ func (fileNamer *Filenamer) OutputFilename() string {
 }
 
 func (fileNamer *Filenamer) MetaFilename() string {
-	name := strings.TrimSuffix(fileNamer.file.Name(), filepath.Ext(fileNamer.file.Name()))
-	return filepath.Join(fileNamer.outdir, name+meta_file_suffix)
+	return filepath.Join(fileNamer.outdir, namePart(fileNamer.file.Name())+meta_file_suffix)
+}
+
+func namePart(filename string) string {
+	return strings.TrimSuffix(filename, filepath.Ext(filename))
 }
