@@ -30,7 +30,7 @@ func ReadFile(filename string) []byte {
 }
 
 func WriteFile(filename string, data []byte) {
-	ioutil.WriteFile(filename, data, 0644)
+	checkError(ioutil.WriteFile(filename, data, 0644))
 }
 
 func checkError(err error) {
