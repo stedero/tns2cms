@@ -6,14 +6,13 @@
 package main
 
 import (
-	"io/ioutil"
 	"tns2cms/lib"
 )
 
 func main() {
 	directoryNamer := lib.ParseCommandLine()
 	lib.CreateDirIfNotExist(directoryNamer.OutDir())
-	files, _ := ioutil.ReadDir(directoryNamer.InDir())
+	files := lib.ReadDir(directoryNamer.InDir())
 	counter := lib.NewCounter(len(files))
 	for _, file := range files {
 		if lib.Accept(file) {
