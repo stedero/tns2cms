@@ -16,7 +16,7 @@ type Filenamer struct {
 }
 
 func Accept(file os.FileInfo) bool {
-	return !file.IsDir() && strings.EqualFold(filepath.Ext(file.Name()), extension)
+	return !file.IsDir() && hasValidExtension(file)
 }
 
 func (fileNamer *Filenamer) InputFilename() string {
@@ -29,6 +29,10 @@ func (fileNamer *Filenamer) OutputFilename() string {
 
 func (fileNamer *Filenamer) MetaFilename() string {
 	return filepath.Join(fileNamer.outdir, namePart(fileNamer.file.Name())+meta_file_suffix)
+}
+
+func hasValidExtension(file os.FileInfo) bool {
+	return strings.EqualFold(filepath.Ext(file.Name()), extension)
 }
 
 func namePart(filename string) string {
