@@ -12,12 +12,10 @@ import (
 func main() {
 	directoryNamer := lib.ParseCommandLine()
 	lib.CreateDirIfNotExist(directoryNamer.OutDir())
-	files := lib.ReadDir(directoryNamer.InDir())
+	files := lib.SelectFiles(directoryNamer.InDir())
 	counter := lib.NewCounter(len(files))
 	for _, file := range files {
-		if lib.Accept(file) {
-			processFile(directoryNamer.NewFilenamer(file))
-		}
+		processFile(directoryNamer.NewFilenamer(file))
 		counter.Next()
 	}
 }

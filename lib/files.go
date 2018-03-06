@@ -16,10 +16,15 @@ func CreateDirIfNotExist(dir string) {
 	}
 }
 
-func ReadDir(dirname string) (files []os.FileInfo) {
-	files, err := ioutil.ReadDir(dirname)
-	checkError(err)
-	return files
+func SelectFiles(dirname string) []os.FileInfo {
+	var selected []os.FileInfo
+	allFiles := readDir(dirname)
+	for _, file := range allFiles {
+		if accept(file) {
+			selected = append(selected, file)
+		}
+	}
+	return selected
 }
 
 func ReadFile(filename string) []byte {
@@ -30,6 +35,12 @@ func ReadFile(filename string) []byte {
 
 func WriteFile(filename string, data []byte) {
 	checkError(ioutil.WriteFile(filename, data, 0644))
+}
+
+func readDir(dirname string) []os.FileInfo {
+	files, err := ioutil.ReadDir(dirname)
+	checkError(err)
+	return files
 }
 
 func checkError(err error) {
