@@ -16,7 +16,7 @@ type Filenamer struct {
 }
 
 func Accept(file os.FileInfo) bool {
-	return strings.EqualFold(filepath.Ext(file.Name()), extension)
+	return !file.IsDir() && strings.EqualFold(filepath.Ext(file.Name()), extension)
 }
 
 func (fileNamer *Filenamer) InputFilename() string {
