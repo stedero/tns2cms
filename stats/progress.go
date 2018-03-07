@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// ProgressIndicator returns a function that displays progress in a percentage
+// ProgressIndicator returns a function that displays progress as a percentage
 // of the total given. It only displays the progress at every 10% step.
 func ProgressIndicator(fileCount int) func() {
 	granularity := 10
