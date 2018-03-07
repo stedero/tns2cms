@@ -1,28 +1,23 @@
-// Display progress indicator
 package stats
 
 import (
 	"fmt"
 )
 
-const granularity = 10
-
-type Counter struct {
-	total int
-	count int
-	next  int
-}
-
-func NewCounter(total int) *Counter {
-	return &Counter{total, 0, granularity}
-}
-
-func (counter *Counter) Next() {
-	counter.count += 1
-	todo := float64(counter.total - counter.count)
-	perc := int(100.0 - (todo / (float64(counter.total) / 100.0)))
-	if perc >= counter.next {
-		counter.next += granularity
-		fmt.Println(fmt.Sprintf("%d%% done", perc))
+// ProgressIndicator returns a function that displays progress in a percentage
+// of the total given. It only displays the progress at every 10% step.
+func ProgressIndicator(fileCount int) func() {
+	granularity := 10
+	total := fileCount
+	count := 0
+	next := granularity
+	return func() {
+		count += 1
+		todo := float64(total - count)
+		perc := int(100.0 - (todo / (float64(total) / 100.0)))
+		if perc >= next {
+			next += granularity
+			fmt.Println(fmt.Sprintf("%d%% done", perc))
+		}
 	}
 }

@@ -17,10 +17,10 @@ func main() {
 	directoryNamer := cmd.ParseCommandLine()
 	io.CreateDirIfNotExist(directoryNamer.OutDir())
 	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
-	counter := stats.NewCounter(len(files))
+	nextFile := stats.ProgressIndicator(len(files))
 	for _, file := range files {
 		processFile(directoryNamer.NewFilenamer(file))
-		counter.Next()
+		nextFile()
 	}
 }
 
