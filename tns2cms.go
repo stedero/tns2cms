@@ -6,24 +6,28 @@
 package main
 
 import (
-	"tns2cms/lib"
+	"tns2cms/cmd"
+	"tns2cms/io"
+	"tns2cms/model"
+	"tns2cms/naming"
+	"tns2cms/stats"
 )
 
 func main() {
-	directoryNamer := lib.ParseCommandLine()
-	lib.CreateDirIfNotExist(directoryNamer.OutDir())
-	files := lib.SelectFiles(directoryNamer.InDir())
-	counter := lib.NewCounter(len(files))
+	directoryNamer := cmd.ParseCommandLine()
+	io.CreateDirIfNotExist(directoryNamer.OutDir())
+	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
+	counter := stats.NewCounter(len(files))
 	for _, file := range files {
 		processFile(directoryNamer.NewFilenamer(file))
 		counter.Next()
 	}
 }
 
-func processFile(fileNamer *lib.Filenamer) {
-	tnsXML := lib.ReadFile(fileNamer.InputFilename())
-	lib.WriteFile(fileNamer.OutputFilename(), tnsXML)
-	tnsArticle := lib.NewTnsArticle(tnsXML)
-	metaXML := lib.NewMetaData(tnsArticle)
-	lib.WriteFile(fileNamer.MetaFilename(), metaXML)
+func processFile(fileNamer *naming.Filenamer) {
+	tnsXML := io.ReadFile(fileNamer.InputFilename())
+	io.WriteFile(fileNamer.OutputFilename(), tnsXML)
+	tnsArticle := model.NewTnsArticle(tnsXML)
+	metaXML := model.NewMetaData(tnsArticle)
+	io.WriteFile(fileNamer.MetaFilename(), metaXML)
 }

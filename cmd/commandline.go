@@ -1,22 +1,24 @@
-package lib
+package cmd
 
 import (
 	"fmt"
 	"os"
+	"tns2cms/io"
+	"tns2cms/naming"
 )
 
-func ParseCommandLine() *DirectoryNamer {
+func ParseCommandLine() *naming.DirectoryNamer {
 	if len(os.Args) != 3 {
 		usage()
 	} else {
 		indir, outdir := os.Args[1], os.Args[2]
-		if !IsExistingDirectory(indir) {
+		if !io.IsExistingDirectory(indir) {
 			fmt.Fprintf(os.Stderr, "%s is not an existing directory\n", indir)
 			exit()
 		}
-		return NewDirectoryNamer(indir, outdir)
+		return naming.NewDirectoryNamer(indir, outdir)
 	}
-	return NewDirectoryNamer("", "")
+	return naming.NewDirectoryNamer("", "")
 }
 
 func usage() {

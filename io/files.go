@@ -1,4 +1,4 @@
-package lib
+package io
 
 import (
 	"io/ioutil"
@@ -16,7 +16,7 @@ func CreateDirIfNotExist(dir string) {
 	}
 }
 
-func SelectFiles(dirname string) []os.FileInfo {
+func SelectFiles(dirname string, accept func(file os.FileInfo) bool) []os.FileInfo {
 	var selected []os.FileInfo
 	allFiles := readDir(dirname)
 	for _, file := range allFiles {

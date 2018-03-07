@@ -1,5 +1,5 @@
 // Display progress indicator
-package lib
+package stats
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package lib
+package naming
 
 import (
 	"os"
@@ -27,7 +27,9 @@ func (fileNamer *Filenamer) MetaFilename() string {
 	return filepath.Join(fileNamer.outdir, namePart(fileNamer.file.Name())+meta_file_suffix)
 }
 
-func accept(file os.FileInfo) bool {
+// Accept accepts files that have the proper extension and that are
+// not a directory.
+func Accept(file os.FileInfo) bool {
 	return !file.IsDir() && hasValidExtension(file)
 }
 
