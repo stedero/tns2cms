@@ -51,3 +51,20 @@ An example of a TNS article:
     </tnsarticletext>
 </tnsarticle>
 ```
+And the generated properties file for this article:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="type">cm:content</entry>
+    <entry key="id">tns_2018-02-22_am_1</entry>
+    <entry key="created">20180222</entry>
+    <entry key="collection">tns</entry>
+    <entry key="title">Treaty between Armenia and Iraq initialled</entry>
+    <entry key="main_cc">am</entry>
+    <entry key="author_initials">BN</entry>
+    <entry key="correspondent">Report from IBFD Tax Treaties Unit</entry>
+</properties>
+```
+Please note that this is not the final version of the meta data file. Waiting for specification.
+
