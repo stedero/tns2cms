@@ -17,7 +17,7 @@ func main() {
 	directoryNamer := naming.NewDirectoryNamer(cmd.ParseCommandLine())
 	io.CreateDirIfNotExist(directoryNamer.OutDir())
 	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
-	defer stats.Reporter("processing %d files", len(files))()
+	defer stats.Reporter(len(files))()
 	nextFile := stats.ProgressIndicator(len(files))
 	for _, file := range files {
 		processFile(directoryNamer.NewFilenamer(file))
