@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	directoryNamer := cmd.ParseCommandLine()
+	directoryNamer := naming.NewDirectoryNamer(cmd.ParseCommandLine())
 	io.CreateDirIfNotExist(directoryNamer.OutDir())
 	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
 	nextFile := stats.ProgressIndicator(len(files))
