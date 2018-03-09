@@ -4,8 +4,10 @@ import (
 	"encoding/xml"
 )
 
+// TnsArticle defines the XML structure of a
+// Tax News Service article.
 type TnsArticle struct {
-	Guid           string `xml:"guid,attr"`
+	GUID           string `xml:"guid,attr"`
 	Collection     string `xml:"collection,attr"`
 	TnsArticleInfo struct {
 		CountryList struct {

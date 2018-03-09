@@ -24,7 +24,7 @@ type Entry struct {
 func NewMetaData(tnsArticle *TnsArticle) []byte {
 	var props Properties
 	props.add("type", "cm:content")
-	props.add("id", tnsArticle.Guid)
+	props.add("id", tnsArticle.GUID)
 	props.add("created", tnsArticle.TnsArticleInfo.ArticleDate.IsoDate)
 	props.add("collection", tnsArticle.Collection)
 	props.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
