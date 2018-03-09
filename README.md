@@ -54,6 +54,7 @@ An example of a TNS article:
 And the generated properties file for this article:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated 2018-03-09T14:08:40+01:00 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <entry key="type">cm:content</entry>
@@ -67,4 +68,3 @@ And the generated properties file for this article:
 </properties>
 ```
 Please note that this is not the final version of the meta data file. Waiting for specification.
-
