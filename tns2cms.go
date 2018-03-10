@@ -6,6 +6,8 @@
 package main
 
 import (
+	"os"
+	"sync"
 	"tns2cms/cmd"
 	"tns2cms/io"
 	"tns2cms/model"
@@ -13,15 +15,26 @@ import (
 	"tns2cms/stats"
 )
 
+// Process files in chunks of 100 to avoid error "too much open files"
+const chunkSize = 100
+
 func main() {
+	var waitGroup sync.WaitGroup
 	directoryNamer := naming.NewDirectoryNamer(cmd.ParseCommandLine())
 	io.CreateDirIfNotExist(directoryNamer.OutDir())
-	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
-	defer stats.Reporter(len(files))()
-	nextFile := stats.ProgressIndicator(len(files))
-	for _, file := range files {
-		processFile(directoryNamer.NewFilenamer(file))
-		nextFile()
+	allFiles := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
+	defer stats.Reporter(len(allFiles))()
+	nextFile := stats.ProgressIndicator(len(allFiles))
+	for _, chunk := range chunks(chunkSize, allFiles) {
+		waitGroup.Add(len(chunk))
+		for _, file := range chunk {
+			go func(fifo os.FileInfo) {
+				processFile(directoryNamer.NewFilenamer(fifo))
+				nextFile()
+				waitGroup.Done()
+			}(file)
+		}
+		waitGroup.Wait()
 	}
 }
 
@@ -31,4 +44,22 @@ func processFile(fileNamer *naming.Filenamer) {
 	tnsArticle := model.NewTnsArticle(tnsXML)
 	metaXML := model.NewMetaData(tnsArticle)
 	io.WriteFile(fileNamer.MetaFilename(), metaXML)
+}
+
+func chunks(chunksize int, files []os.FileInfo) [][]os.FileInfo {
+	rows := len(files)/chunksize + 1
+	chunks := make([][]os.FileInfo, rows)
+	for i := range chunks {
+		start := i * chunksize
+		end := start + min(chunksize, len(files)-start)
+		chunks[i] = files[start:end]
+	}
+	return chunks
+}
+
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
 }
