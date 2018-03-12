@@ -14,19 +14,17 @@ const chunkSize = 100
 type Processor struct {
 	dirNamer    *naming.DirectoryNamer
 	coreHandler func(*naming.Filenamer)
-	nextFile    func()
 }
 
 // NewProcessor creates a new Processor.
-func NewProcessor(dirNamer *naming.DirectoryNamer, coreHandler func(*naming.Filenamer), nextFile func()) *Processor {
-	return &Processor{dirNamer, coreHandler, nextFile}
+func NewProcessor(dirNamer *naming.DirectoryNamer, coreHandler func(*naming.Filenamer)) *Processor {
+	return &Processor{dirNamer, coreHandler}
 }
 
 // ExecSequential processes files one by one.
 func (processor *Processor) ExecSequential(files []os.FileInfo) {
 	for _, file := range files {
 		processor.coreHandler(processor.dirNamer.NewFilenamer(file))
-		processor.nextFile()
 	}
 }
 
@@ -44,7 +42,6 @@ func (processor *Processor) ExecConcurrent(files []os.FileInfo) {
 
 func (processor *Processor) exec(file os.FileInfo, waitGroup *sync.WaitGroup) {
 	processor.coreHandler(processor.dirNamer.NewFilenamer(file))
-	processor.nextFile()
 	waitGroup.Done()
 }
 
