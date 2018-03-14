@@ -35,13 +35,13 @@ func NewMetaData(tnsArticle *TnsArticle) []byte {
 	if err != nil {
 		panic(err)
 	}
-	return []byte(xml.Header + nowAsISO8160() + metaDataDoctype + string(xmlMeta))
+	return []byte(xml.Header + nowAsComment() + metaDataDoctype + string(xmlMeta))
 }
 
 func (p *Properties) add(key string, value string) {
 	p.Entries = append(p.Entries, Entry{key, value})
 }
 
-func nowAsISO8160() string {
-	return "<!-- Generated " + fmt.Sprintf(time.Now().Format(time.RFC3339)) + " -->\n"
+func nowAsComment() string {
+	return fmt.Sprintf("<!-- Generated %s -->\n", time.Now().Format(time.RFC3339))
 }
