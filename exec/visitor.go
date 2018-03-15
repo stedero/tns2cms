@@ -31,7 +31,7 @@ func (visitor *Visitor) walker() func(string, os.FileInfo, error) error {
 	reporter := visitor.reporter
 	return func(path string, fileInfo os.FileInfo, err error) error {
 		validation := naming.Validate(fileInfo)
-		reporter.Register(validation, path)
+		defer reporter.Register(validation, path)
 		switch validation {
 		case naming.AcceptFile:
 			fileNamer := naming.NewFilenamerFromRoot(rootDirNamer, path, fileInfo)
