@@ -21,20 +21,6 @@ func CreateDirIfNotExist(dir string) {
 	}
 }
 
-// SelectFiles selects files from the given directory filtered by the
-// given accept function. If an error occurs then the program
-// terminates with a panic message.
-func SelectFiles(dirname string, accept func(file os.FileInfo) bool) []os.FileInfo {
-	var selected []os.FileInfo
-	allFiles := readDir(dirname)
-	for _, file := range allFiles {
-		if accept(file) {
-			selected = append(selected, file)
-		}
-	}
-	return selected
-}
-
 // ReadFile reads an entire file into memory. If an error occurs then
 // the program terminates with a panic message.
 func ReadFile(filename string) []byte {
@@ -49,12 +35,6 @@ func ReadFile(filename string) []byte {
 // the program terminates with a panic message.
 func WriteFile(filename string, data []byte) {
 	checkError(ioutil.WriteFile(filename, data, 0644))
-}
-
-func readDir(dirname string) []os.FileInfo {
-	files, err := ioutil.ReadDir(dirname)
-	checkError(err)
-	return files
 }
 
 func checkError(err error) {

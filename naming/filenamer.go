@@ -68,17 +68,6 @@ func (fileNamer *Filenamer) MetaFilename() string {
 	return filepath.Join(fileNamer.outdir, namePart(fileNamer.fileName)+metaFileSuffix)
 }
 
-// AcceptDir accepts directories with a valid name.
-// func AcceptDir(file os.FileInfo) bool {
-// 	return file.IsDir() && hasValidDirectoryName(file)
-// }
-
-// AcceptFile accepts files that have the proper extension and that are
-// not a directory.
-// func AcceptFile(file os.FileInfo) bool {
-// 	return !file.IsDir() && hasValidExtension(file)
-// }
-
 func hasValidDirectoryName(fileInfo os.FileInfo) bool {
 	return !strings.HasPrefix(fileInfo.Name(), ".")
 }
