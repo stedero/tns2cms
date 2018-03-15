@@ -19,7 +19,7 @@ func NewDirectoryNamer(indir string, outdir string) *DirectoryNamer {
 // NewFilenamer creates a Filenamer instance with the directories of this
 // DirectoryNamer.
 func (directoryNamer *DirectoryNamer) NewFilenamer(file os.FileInfo) *Filenamer {
-	return &Filenamer{directoryNamer.indir, directoryNamer.outdir, file}
+	return &Filenamer{*directoryNamer, file}
 }
 
 // InDir returns the input directory.

@@ -12,7 +12,8 @@ const ballotX = "\u2717"
 func TestInputFilename(t *testing.T) {
 	t.Log("Given the need to test filenamer functionality")
 	file, _ := os.Stat("filenamer_test.go")
-	fileNamer := &Filenamer{"/test/indir", "/test/outdir", file}
+	dirNamer := NewDirectoryNamer("/test/indir", "/test/outdir")
+	fileNamer := &Filenamer{*dirNamer, file}
 
 	expected := "/test/indir/filenamer_test.go"
 	actual := filepath.ToSlash(fileNamer.InputFilename())

@@ -11,9 +11,8 @@ const metaFileSuffix = ".metadata.properties" + extension
 
 // Filenamer holds all data needed to create input- and outputfilenames.
 type Filenamer struct {
-	indir  string
-	outdir string
-	file   os.FileInfo
+	DirectoryNamer
+	file os.FileInfo
 }
 
 // InputFilename returns the path of an input file.
