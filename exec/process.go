@@ -24,7 +24,7 @@ func NewProcessor(dirNamer *naming.DirectoryNamer, coreHandler func(*naming.File
 // ExecSequential processes files one by one.
 func (processor *Processor) ExecSequential(files []os.FileInfo) {
 	for _, file := range files {
-		processor.coreHandler(processor.dirNamer.NewFilenamer(file))
+		processor.proccessMain(file)
 	}
 }
 
@@ -41,8 +41,13 @@ func (processor *Processor) ExecConcurrent(files []os.FileInfo) {
 }
 
 func (processor *Processor) exec(file os.FileInfo, waitGroup *sync.WaitGroup) {
-	processor.coreHandler(processor.dirNamer.NewFilenamer(file))
+	processor.proccessMain(file)
 	waitGroup.Done()
+}
+
+func (processor *Processor) proccessMain(file os.FileInfo) {
+	fileNamer := naming.NewFilenamer(processor.dirNamer, file)
+	processor.coreHandler(fileNamer)
 }
 
 func chunks(chunksize int, files []os.FileInfo) [][]os.FileInfo {

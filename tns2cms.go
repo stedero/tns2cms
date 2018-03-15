@@ -16,22 +16,16 @@ import (
 
 func main() {
 	directoryNamer := naming.NewDirectoryNamer(cmd.ParseCommandLine())
-	io.CreateDirIfNotExist(directoryNamer.OutDir())
-	files := io.SelectFiles(directoryNamer.InDir(), naming.Accept)
-	defer stats.Reporter(len(files))()
-	nextFile := stats.ProgressIndicator(len(files))
-	processor := exec.NewProcessor(directoryNamer, handler(nextFile))
-	processor.ExecConcurrent(files)
-	//	processor.ExecSequential(files)
+	reporter := stats.NewReporter()
+	visitor := exec.NewVisitor(directoryNamer, process, reporter)
+	visitor.Walk()
+	reporter.End()
 }
 
-func handler(nextFile func()) func(*naming.Filenamer) {
-	return func(fileNamer *naming.Filenamer) {
-		tnsXML := io.ReadFile(fileNamer.InputFilename())
-		io.WriteFile(fileNamer.OutputFilename(), tnsXML)
-		tnsArticle := model.NewTnsArticle(tnsXML)
-		metaXML := model.NewMetaData(tnsArticle)
-		io.WriteFile(fileNamer.MetaFilename(), metaXML)
-		nextFile()
-	}
+func process(fileNamer *naming.Filenamer) {
+	tnsXML := io.ReadFile(fileNamer.InputFilename())
+	io.WriteFile(fileNamer.OutputFilename(), tnsXML)
+	tnsArticle := model.NewTnsArticle(tnsXML)
+	metaXML := model.NewMetaData(tnsArticle)
+	io.WriteFile(fileNamer.MetaFilename(), metaXML)
 }

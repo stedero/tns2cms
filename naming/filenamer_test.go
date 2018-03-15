@@ -13,7 +13,7 @@ func TestInputFilename(t *testing.T) {
 	t.Log("Given the need to test filenamer functionality")
 	file, _ := os.Stat("filenamer_test.go")
 	dirNamer := NewDirectoryNamer("/test/indir", "/test/outdir")
-	fileNamer := &Filenamer{*dirNamer, file}
+	fileNamer := &Filenamer{*dirNamer, file.Name()}
 
 	expected := "/test/indir/filenamer_test.go"
 	actual := filepath.ToSlash(fileNamer.InputFilename())

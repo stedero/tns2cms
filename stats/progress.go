@@ -3,34 +3,38 @@ package stats
 import (
 	"fmt"
 	"os"
-	"sync"
 	"time"
+	"tns2cms/naming"
 )
 
-// ProgressIndicator returns a function that displays progress
-// as a percentage of the total given on stderr.
-func ProgressIndicator(total int) func() {
-	onePercent := float64(total) / 100.0
-	done, next := 0, 10
-	mutex := &sync.Mutex{}
-	return func() {
-		mutex.Lock()
-		done++
-		perc := int(float64(done) / onePercent)
-		if perc >= next {
-			next += 10
-			fmt.Fprintln(os.Stderr, fmt.Sprintf("%d%% done", perc))
-		}
-		mutex.Unlock()
-	}
+// Reporter definition
+type Reporter struct {
+	start               time.Time
+	directoriesAccepted int
+	filesAccepted       int
 }
 
-// Reporter returns a function that displays the time it took to
-// process a number of files.
-func Reporter(fileCount int) func() {
-	start := time.Now()
-	return func() {
-		elapsed := time.Since(start)
-		fmt.Fprintf(os.Stderr, "processing %d files took %s\n", fileCount, elapsed)
+// NewReporter creates a reporter.
+func NewReporter() *Reporter {
+	return &Reporter{time.Now(), 0, 0}
+}
+
+// End reports the termination of the process with counts.
+func (reporter *Reporter) End() {
+	elapsed := time.Since(reporter.start)
+	fmt.Fprintf(os.Stderr, "processing %d files in %d directories took %s\n", reporter.filesAccepted, reporter.directoriesAccepted, elapsed)
+}
+
+// Register a validation entry.
+func (reporter *Reporter) Register(validation naming.Validation, path string) {
+	switch validation {
+	case naming.AcceptDir:
+		reporter.directoriesAccepted++
+	case naming.AcceptFile:
+		reporter.filesAccepted++
+	case naming.RejectDir:
+		fmt.Fprintf(os.Stderr, "skipped directory: %s\n", path)
+	case naming.RejectFile:
+		fmt.Fprintf(os.Stderr, "skipped file: %s\n", path)
 	}
 }
