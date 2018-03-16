@@ -22,6 +22,11 @@ func (directoryNamer *DirectoryNamer) InDir() string {
 	return directoryNamer.indir
 }
 
+// OutDir returns the output directory name.
+func (directoryNamer *DirectoryNamer) OutDir() string {
+	return directoryNamer.outdir
+}
+
 // NewOutdirName creates a new output directory name from the specified input path.
 func (directoryNamer *DirectoryNamer) NewOutdirName(inputPath string) string {
 	part := strings.TrimPrefix(inputPath, directoryNamer.indir)
