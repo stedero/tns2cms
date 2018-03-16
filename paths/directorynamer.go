@@ -1,4 +1,4 @@
-package naming
+package paths
 
 import (
 	"path/filepath"
@@ -17,14 +17,13 @@ func NewDirectoryNamer(indir string, outdir string) *DirectoryNamer {
 	return &DirectoryNamer{indir, outdir}
 }
 
-// InDir returns the input directory.
+// InDir returns the input directory name.
 func (directoryNamer *DirectoryNamer) InDir() string {
 	return directoryNamer.indir
 }
 
-// NewOutdirName creates a new output directory name for the specified path.
-func (directoryNamer *DirectoryNamer) NewOutdirName(path string) string {
-	source := strings.TrimPrefix(path, directoryNamer.indir)
-	dest := filepath.Join(directoryNamer.outdir, source)
-	return dest
+// NewOutdirName creates a new output directory name from the specified input path.
+func (directoryNamer *DirectoryNamer) NewOutdirName(inputPath string) string {
+	part := strings.TrimPrefix(inputPath, directoryNamer.indir)
+	return filepath.Join(directoryNamer.outdir, part)
 }

@@ -10,19 +10,19 @@ import (
 	"tns2cms/exec"
 	"tns2cms/io"
 	"tns2cms/model"
-	"tns2cms/naming"
+	"tns2cms/paths"
 	"tns2cms/stats"
 )
 
 func main() {
-	directoryNamer := naming.NewDirectoryNamer(cmd.ParseCommandLine())
+	directoryNamer := cmd.ParseCommandLine()
 	reporter := stats.NewReporter()
 	visitor := exec.NewVisitor(directoryNamer, process, reporter)
 	visitor.Walk()
 	reporter.End()
 }
 
-func process(fileNamer *naming.Filenamer) {
+func process(fileNamer *paths.Filenamer) {
 	tnsXML := io.ReadFile(fileNamer.InputFilename())
 	io.WriteFile(fileNamer.OutputFilename(), tnsXML)
 	tnsArticle := model.NewTnsArticle(tnsXML)

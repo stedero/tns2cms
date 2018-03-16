@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"time"
-	"tns2cms/naming"
+	"tns2cms/paths"
 )
 
 // Reporter definition
@@ -26,15 +26,15 @@ func (reporter *Reporter) End() {
 }
 
 // Register a validation entry.
-func (reporter *Reporter) Register(validation naming.Validation, path string) {
+func (reporter *Reporter) Register(validation paths.Validation, path string) {
 	switch validation {
-	case naming.AcceptDir:
+	case paths.AcceptDir:
 		reporter.directoriesAccepted++
-	case naming.AcceptFile:
+	case paths.AcceptFile:
 		reporter.filesAccepted++
-	case naming.RejectDir:
+	case paths.RejectDir:
 		fmt.Fprintf(os.Stderr, "skipped directory: %s\n", path)
-	case naming.RejectFile:
+	case paths.RejectFile:
 		fmt.Fprintf(os.Stderr, "skipped file: %s\n", path)
 	}
 }

@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"os"
 	"tns2cms/io"
+	"tns2cms/paths"
 )
 
 // ParseCommandLine extracts directory names from the command line
-func ParseCommandLine() (indir, outdir string) {
+func ParseCommandLine() *paths.DirectoryNamer {
 	if len(os.Args) != 3 {
 		usage()
 	} else {
@@ -16,9 +17,9 @@ func ParseCommandLine() (indir, outdir string) {
 			fmt.Fprintf(os.Stderr, "%s is not an existing directory\n", indir)
 			exit()
 		}
-		return indir, outdir
+		return paths.NewDirectoryNamer(indir, outdir)
 	}
-	return "", ""
+	return nil
 }
 
 func usage() {

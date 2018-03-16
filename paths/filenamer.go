@@ -1,4 +1,4 @@
-package naming
+package paths
 
 import (
 	"os"
