@@ -2,6 +2,7 @@ package io
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -17,7 +18,10 @@ func IsExistingDirectory(dir string) bool {
 // with a panic message.
 func CreateDirIfNotExist(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		checkError(os.MkdirAll(dir, 0755))
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			log.Fatalf("fail to create directory %s: %v", dir, err)
+		}
 	}
 }
 
@@ -25,7 +29,9 @@ func CreateDirIfNotExist(dir string) {
 // the program terminates with a panic message.
 func ReadFile(filename string) []byte {
 	data, err := ioutil.ReadFile(filename)
-	checkError(err)
+	if err != nil {
+		log.Fatalf("fail to read file %s: %v", filename, err)
+	}
 	return data
 }
 
@@ -34,11 +40,8 @@ func ReadFile(filename string) []byte {
 // otherwise WriteFile truncates it before writing. If an error occurs then
 // the program terminates with a panic message.
 func WriteFile(filename string, data []byte) {
-	checkError(ioutil.WriteFile(filename, data, 0644))
-}
-
-func checkError(err error) {
+	err := ioutil.WriteFile(filename, data, 0644)
 	if err != nil {
-		panic(err)
+		log.Fatalf("fail to write file %s: %v", filename, err)
 	}
 }

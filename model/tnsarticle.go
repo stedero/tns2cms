@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/xml"
+	"log"
 )
 
 // TnsArticle defines the XML structure of a
@@ -46,7 +47,7 @@ func NewTnsArticle(data []byte) *TnsArticle {
 	var tnsArticle TnsArticle
 	err := xml.Unmarshal(data, &tnsArticle)
 	if err != nil {
-		panic(err)
+		log.Fatalf("error unmarshaling TNS article: %v", err)
 	}
 	tnsArticle.addDTDDefaults()
 	return &tnsArticle

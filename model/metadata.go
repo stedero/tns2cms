@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/xml"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -33,7 +34,7 @@ func NewMetaData(tnsArticle *TnsArticle) []byte {
 	props.add("correspondent", tnsArticle.TnsArticleInfo.Correspondent)
 	xmlMeta, err := xml.MarshalIndent(&props, "", "    ")
 	if err != nil {
-		panic(err)
+		log.Fatalf("error marshaling TNS article %s to XML: %v", tnsArticle.GUID, err)
 	}
 	return []byte(xml.Header + nowAsComment() + metaDataDoctype + string(xmlMeta))
 }

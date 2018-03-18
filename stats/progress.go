@@ -1,8 +1,7 @@
 package stats
 
 import (
-	"fmt"
-	"os"
+	"log"
 	"time"
 	"tns2cms/paths"
 )
@@ -22,7 +21,7 @@ func NewReporter() *Reporter {
 // End reports the termination of the process with counts.
 func (reporter *Reporter) End() {
 	elapsed := time.Since(reporter.start)
-	fmt.Fprintf(os.Stderr, "processing %d files in %d directories took %s\n", reporter.filesAccepted, reporter.directoriesAccepted, elapsed)
+	log.Printf("processing %d files in %d directories took %s\n", reporter.filesAccepted, reporter.directoriesAccepted, elapsed)
 }
 
 // Register a validation entry.
@@ -33,8 +32,8 @@ func (reporter *Reporter) Register(validation paths.Validation, path string) {
 	case paths.AcceptFile:
 		reporter.filesAccepted++
 	case paths.RejectDir:
-		fmt.Fprintf(os.Stderr, "skipped directory: %s\n", path)
+		log.Printf("skipped directory: %s\n", path)
 	case paths.RejectFile:
-		fmt.Fprintf(os.Stderr, "skipped file: %s\n", path)
+		log.Printf("skipped file: %s\n", path)
 	}
 }
