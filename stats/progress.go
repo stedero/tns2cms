@@ -35,5 +35,6 @@ func (reporter *Reporter) Register(validation paths.Validation, path string) {
 		log.Printf("skipped directory: %s\n", path)
 	case paths.RejectFile:
 		log.Printf("skipped file: %s\n", path)
+	default:
 	}
 }
