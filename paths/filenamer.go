@@ -9,15 +9,16 @@ import (
 const extension = ".xml"
 const metaFileSuffix = ".metadata.properties" + extension
 
-// Validation defines the possible validation values
-type Validation int
+// Action defines the possible actions to perform on a file or directory
+type Action int
 
-// The validate response values
+// The Action response values
 const (
-	AcceptDir Validation = iota
+	AcceptDir Action = iota
 	AcceptFile
 	RejectDir
 	RejectFile
+	NumActions
 )
 
 // Filenamer holds all data needed to create input- and outputfilenames.
@@ -34,13 +35,13 @@ func NewFilenamerFromRoot(rootDirNamer *DirectoryNamer, currentPath string, file
 	return &Filenamer{*NewDirectoryNamer(source, dest), fileInfo.Name()}
 }
 
-// NewFilenamer creates a filenamer from root directory info.
+// NewFilenamer creates a filenamer.
 func NewFilenamer(dirNamer *DirectoryNamer, fileInfo os.FileInfo) *Filenamer {
 	return &Filenamer{*dirNamer, fileInfo.Name()}
 }
 
-// Validate determines whether a file or directory can be accepted
-func Validate(fileInfo os.FileInfo) Validation {
+// Validate determines what to do with a file or directory.
+func Validate(fileInfo os.FileInfo) Action {
 	if fileInfo.IsDir() {
 		if hasValidDirectoryName(fileInfo) {
 			return AcceptDir
