@@ -34,7 +34,7 @@ func (visitor *Visitor) walker() func(string, os.FileInfo, error) error {
 		defer reporter.Register(action, path)
 		switch action {
 		case paths.AcceptFile:
-			fileNamer := paths.NewFilenamerFromRoot(rootDirNamer, path, fileInfo)
+			fileNamer := paths.NewFilenamer(rootDirNamer, path, fileInfo)
 			visitor.process(fileNamer)
 		case paths.AcceptDir:
 			dest := rootDirNamer.NewOutdirName(path)

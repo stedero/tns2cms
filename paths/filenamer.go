@@ -27,17 +27,12 @@ type Filenamer struct {
 	fileName string
 }
 
-// NewFilenamerFromRoot creates a filenamer from root directory info.
-func NewFilenamerFromRoot(rootDirNamer *DirectoryNamer, currentPath string, fileInfo os.FileInfo) *Filenamer {
+// NewFilenamer creates a filenamer from root directory info.
+func NewFilenamer(rootDirNamer *DirectoryNamer, currentPath string, fileInfo os.FileInfo) *Filenamer {
 	source := strings.TrimSuffix(currentPath, fileInfo.Name())
 	part := strings.TrimPrefix(source, rootDirNamer.InDir())
 	dest := filepath.Join(rootDirNamer.OutDir(), part)
 	return &Filenamer{*NewDirectoryNamer(source, dest), fileInfo.Name()}
-}
-
-// NewFilenamer creates a filenamer.
-func NewFilenamer(dirNamer *DirectoryNamer, fileInfo os.FileInfo) *Filenamer {
-	return &Filenamer{*dirNamer, fileInfo.Name()}
 }
 
 // Validate determines what to do with a file or directory.
