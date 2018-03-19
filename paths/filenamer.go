@@ -61,7 +61,7 @@ func (fileNamer *Filenamer) OutputFilename() string {
 
 // MetaFilename returns the path of a meta data file.
 func (fileNamer *Filenamer) MetaFilename() string {
-	return filepath.Join(fileNamer.outdir, namePart(fileNamer.fileName)+metaFileSuffix)
+	return filepath.Join(fileNamer.outdir, fileNamer.fileName+metaFileSuffix)
 }
 
 func hasValidDirectoryName(fileInfo os.FileInfo) bool {
@@ -70,8 +70,4 @@ func hasValidDirectoryName(fileInfo os.FileInfo) bool {
 
 func hasValidExtension(fileInfo os.FileInfo) bool {
 	return strings.EqualFold(filepath.Ext(fileInfo.Name()), extension)
-}
-
-func namePart(filename string) string {
-	return strings.TrimSuffix(filename, filepath.Ext(filename))
 }
