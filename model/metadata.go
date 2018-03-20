@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -27,11 +28,14 @@ func NewMetaData(tnsArticle *TnsArticle) []byte {
 	props.add("type", "cm:content")
 	props.add("id", tnsArticle.GUID)
 	props.add("created", tnsArticle.TnsArticleInfo.ArticleDate.IsoDate)
+	props.add("report_type", tnsArticle.ReportType)
 	props.add("collection", tnsArticle.Collection)
 	props.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
-	props.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
 	props.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
-	props.add("correspondent", tnsArticle.TnsArticleInfo.Correspondent)
+	props.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
+	props.add("country_codes", joinCountryCodes(tnsArticle))
+	props.add("country_names", joinCountryNames(tnsArticle))
+	props.add("xrefs", joinXrefs(tnsArticle))
 	xmlMeta, err := xml.MarshalIndent(&props, "", "    ")
 	if err != nil {
 		log.Fatalf("error marshaling TNS article %s to XML: %v", tnsArticle.GUID, err)
@@ -45,4 +49,28 @@ func (p *Properties) add(key string, value string) {
 
 func nowAsComment() string {
 	return fmt.Sprintf("<!-- Generated %s -->\n", time.Now().Format(time.RFC3339))
+}
+
+func joinCountryCodes(tnsArticle *TnsArticle) string {
+	var countries []string
+	for _, country := range tnsArticle.TnsArticleInfo.CountryList.Countries {
+		countries = append(countries, country.CC)
+	}
+	return strings.Join(countries, ",")
+}
+
+func joinCountryNames(tnsArticle *TnsArticle) string {
+	var countries []string
+	for _, country := range tnsArticle.TnsArticleInfo.CountryList.Countries {
+		countries = append(countries, country.Name)
+	}
+	return strings.Join(countries, ",")
+}
+
+func joinXrefs(tnsArticle *TnsArticle) string {
+	var xrefs []string
+	for _, ref := range tnsArticle.TnsArticleInfo.Reference {
+		xrefs = append(xrefs, ref.Target)
+	}
+	return strings.Join(xrefs, ",")
 }

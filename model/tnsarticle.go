@@ -10,6 +10,7 @@ import (
 type TnsArticle struct {
 	GUID           string `xml:"guid,attr"`
 	Collection     string `xml:"collection,attr"`
+	ReportType     string `xml:"reporttype,attr"`
 	TnsArticleInfo struct {
 		CountryList struct {
 			Main      string `xml:"main,attr"`
@@ -56,5 +57,8 @@ func NewTnsArticle(data []byte) *TnsArticle {
 func (tnsArticle *TnsArticle) addDTDDefaults() {
 	if tnsArticle.Collection == "" {
 		tnsArticle.Collection = "tns"
+	}
+	if tnsArticle.ReportType == "" {
+		tnsArticle.ReportType = "standard"
 	}
 }
