@@ -33,9 +33,9 @@ func NewMetaData(tnsArticle *TnsArticle) []byte {
 	props.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
 	props.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
 	props.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
-	props.add("country_codes", joinCountryCodes(tnsArticle))
-	props.add("country_names", joinCountryNames(tnsArticle))
-	props.add("xrefs", joinXrefs(tnsArticle))
+	props.add("country_codes", mapJoin(countryCode(tnsArticle)))
+	props.add("country_names", mapJoin(countryName(tnsArticle)))
+	props.add("xrefs", mapJoin(reference(tnsArticle)))
 	xmlMeta, err := xml.MarshalIndent(&props, "", "    ")
 	if err != nil {
 		log.Fatalf("error marshaling TNS article %s to XML: %v", tnsArticle.GUID, err)
@@ -51,26 +51,28 @@ func nowAsComment() string {
 	return fmt.Sprintf("<!-- Generated %s -->\n", time.Now().Format(time.RFC3339))
 }
 
-func joinCountryCodes(tnsArticle *TnsArticle) string {
-	var countries []string
-	for _, country := range tnsArticle.TnsArticleInfo.CountryList.Countries {
-		countries = append(countries, country.CC)
+func mapJoin(max int, get func(int) string) string {
+	var result []string
+	for i := 0; i < max; i++ {
+		result = append(result, get(i))
 	}
-	return strings.Join(countries, ",")
+	return strings.Join(result, ",")
 }
 
-func joinCountryNames(tnsArticle *TnsArticle) string {
-	var countries []string
-	for _, country := range tnsArticle.TnsArticleInfo.CountryList.Countries {
-		countries = append(countries, country.Name)
+func countryCode(tnsArticle *TnsArticle) (int, func(int) string) {
+	return len(tnsArticle.TnsArticleInfo.CountryList.Countries), func(i int) string {
+		return tnsArticle.TnsArticleInfo.CountryList.Countries[i].CC
 	}
-	return strings.Join(countries, ",")
 }
 
-func joinXrefs(tnsArticle *TnsArticle) string {
-	var xrefs []string
-	for _, ref := range tnsArticle.TnsArticleInfo.Reference {
-		xrefs = append(xrefs, ref.Target)
+func countryName(tnsArticle *TnsArticle) (int, func(int) string) {
+	return len(tnsArticle.TnsArticleInfo.CountryList.Countries), func(i int) string {
+		return tnsArticle.TnsArticleInfo.CountryList.Countries[i].Name
 	}
-	return strings.Join(xrefs, ",")
+}
+
+func reference(tnsArticle *TnsArticle) (int, func(int) string) {
+	return len(tnsArticle.TnsArticleInfo.Reference), func(i int) string {
+		return tnsArticle.TnsArticleInfo.Reference[i].Target
+	}
 }
