@@ -54,20 +54,20 @@ An example of a TNS article:
 And the generated properties file for this article:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated 2018-03-20T21:02:14+01:00 -->
+<!-- Generated 2018-03-21T16:36:13+01:00 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-    <entry key="type">cm:content</entry>
-    <entry key="id">tns_2018-02-22_am_1</entry>
-    <entry key="created">20180222</entry>
-    <entry key="report_type">inc_tax_tt_neg</entry>
-    <entry key="collection">tns</entry>
-    <entry key="title">Treaty between Armenia and Iraq initialled</entry>
-    <entry key="author_initials">BN</entry>
-    <entry key="main_cc">am</entry>
-    <entry key="country_codes">am,iq</entry>
-    <entry key="country_names">Armenia,Iraq</entry>
-    <entry key="xrefs">tns_2018-02-19_am_1,tt_am-iq_01_eng_2018_tt__td1</entry>
+    <entry key="ibfd:type">cm:content</entry>
+    <entry key="ibfd:id">tns_2018-02-22_am_1</entry>
+    <entry key="ibfd:created">20180222</entry>
+    <entry key="ibfd:report_type">inc_tax_tt_neg</entry>
+    <entry key="ibfd:collection">tns</entry>
+    <entry key="ibfd:title">Treaty between Armenia and Iraq initialled</entry>
+    <entry key="ibfd:author_initials">BN</entry>
+    <entry key="ibfd:main_cc">am</entry>
+    <entry key="ibfd:country_codes">am,iq</entry>
+    <entry key="ibfd:country_names">Armenia,Iraq</entry>
+    <entry key="ibfd:xrefs">tns_2018-02-19_am_1,tt_am-iq_01_eng_2018_tt__td1</entry>
 </properties>```
 
 Please note that this is not the final version of the meta data file. Waiting for specification.

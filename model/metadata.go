@@ -23,6 +23,7 @@ type Entry struct {
 }
 
 const multiValueJoiner = ","
+const metaNameSpace = "ibfd:"
 
 // NewMetaData transforms a TNS article into meta data XML.
 func NewMetaData(tnsArticle *TnsArticle) []byte {
@@ -46,7 +47,7 @@ func NewMetaData(tnsArticle *TnsArticle) []byte {
 }
 
 func (p *Properties) add(key string, value string) {
-	p.Entries = append(p.Entries, Entry{key, value})
+	p.Entries = append(p.Entries, Entry{metaNameSpace + key, value})
 }
 
 func nowAsComment() string {
