@@ -22,6 +22,8 @@ type Entry struct {
 	Value string `xml:",innerxml"`
 }
 
+const multiValueJoiner = ","
+
 // NewMetaData transforms a TNS article into meta data XML.
 func NewMetaData(tnsArticle *TnsArticle) []byte {
 	var props Properties
@@ -56,7 +58,7 @@ func mapJoin(max int, get func(int) string) string {
 	for i := 0; i < max; i++ {
 		result = append(result, get(i))
 	}
-	return strings.Join(result, ",")
+	return strings.Join(result, multiValueJoiner)
 }
 
 func countryCode(tnsArticle *TnsArticle) (int, func(int) string) {
@@ -67,7 +69,7 @@ func countryCode(tnsArticle *TnsArticle) (int, func(int) string) {
 
 func countryName(tnsArticle *TnsArticle) (int, func(int) string) {
 	return len(tnsArticle.TnsArticleInfo.CountryList.Countries), func(i int) string {
-		return tnsArticle.TnsArticleInfo.CountryList.Countries[i].Name
+		return strings.Replace(tnsArticle.TnsArticleInfo.CountryList.Countries[i].Name, multiValueJoiner, " ", -1)
 	}
 }
 
