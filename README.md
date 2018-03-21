@@ -69,4 +69,5 @@ And the generated properties file for this article:
     <entry key="country_names">Armenia,Iraq</entry>
     <entry key="xrefs">tns_2018-02-19_am_1,tt_am-iq_01_eng_2018_tt__td1</entry>
 </properties>```
+
 Please note that this is not the final version of the meta data file. Waiting for specification.
