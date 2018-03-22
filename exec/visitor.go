@@ -3,9 +3,9 @@ package exec
 import (
 	"os"
 	"path/filepath"
-	"tns2cms/io"
-	"tns2cms/paths"
-	"tns2cms/stats"
+	"ibfd.org/tns2cms/io"
+	"ibfd.org/tns2cms/paths"
+	"ibfd.org/tns2cms/stats"
 )
 
 // Visitor defines a visitor

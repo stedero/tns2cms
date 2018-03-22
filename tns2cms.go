@@ -6,12 +6,12 @@
 package main
 
 import (
-	"tns2cms/cmd"
-	"tns2cms/exec"
-	"tns2cms/io"
-	"tns2cms/model"
-	"tns2cms/paths"
-	"tns2cms/stats"
+	"ibfd.org/tns2cms/cmd"
+	"ibfd.org/tns2cms/exec"
+	"ibfd.org/tns2cms/io"
+	"ibfd.org/tns2cms/model"
+	"ibfd.org/tns2cms/paths"
+	"ibfd.org/tns2cms/stats"
 )
 
 func main() {

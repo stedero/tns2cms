@@ -3,7 +3,7 @@ package stats
 import (
 	"log"
 	"time"
-	"tns2cms/paths"
+	"ibfd.org/tns2cms/paths"
 )
 
 // Reporter definition

@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"tns2cms/io"
-	"tns2cms/paths"
+	"ibfd.org/tns2cms/io"
+	"ibfd.org/tns2cms/paths"
 )
 
 // ParseCommandLine extracts directory names from the command line
