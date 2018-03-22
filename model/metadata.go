@@ -54,10 +54,10 @@ func nowAsComment() string {
 	return fmt.Sprintf("<!-- Generated %s -->\n", time.Now().Format(time.RFC3339))
 }
 
-func mapJoin(max int, get func(int) string) string {
-	var result []string
-	for i := 0; i < max; i++ {
-		result = append(result, get(i))
+func mapJoin(len int, get func(int) string) string {
+	result := make([]string, len)
+	for i := 0; i < len; i++ {
+		result[i] = get(i)
 	}
 	return strings.Join(result, multiValueJoiner)
 }
