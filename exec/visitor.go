@@ -1,11 +1,12 @@
 package exec
 
 import (
+	"os"
+	"path/filepath"
+
 	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/paths"
 	"ibfd.org/tns2cms/stats"
-	"os"
-	"path/filepath"
 )
 
 // Visitor defines a visitor
@@ -15,12 +16,13 @@ type Visitor struct {
 	reporter     *stats.Reporter
 }
 
-// NewVisitor creates a new visitor
+// NewVisitor creates a directory visitor which scans a directory tree
+// recursively and processes each valid file using the supplied processor.
 func NewVisitor(rootDirNamer *paths.DirectoryNamer, processor func(*paths.Filenamer), reporter *stats.Reporter) *Visitor {
 	return &Visitor{rootDirNamer, processor, reporter}
 }
 
-// Walk the directory tree and process each file
+// Walk the directory tree and process each file.
 func (visitor *Visitor) Walk() error {
 	return filepath.Walk(visitor.rootDirNamer.InDir(), visitor.walker())
 }

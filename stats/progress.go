@@ -1,9 +1,10 @@
 package stats
 
 import (
-	"ibfd.org/tns2cms/paths"
 	"log"
 	"time"
+
+	"ibfd.org/tns2cms/paths"
 )
 
 // Reporter definition
@@ -25,7 +26,7 @@ func (reporter *Reporter) End() {
 	log.Printf("processing %d files in %d directories took %s", reporter.counts[paths.AcceptFile], reporter.counts[paths.AcceptDir], elapsed)
 }
 
-// Register a validation entry.
+// Register an action.
 func (reporter *Reporter) Register(action paths.Action, path string) {
 	reporter.counts[action]++
 	switch action {
