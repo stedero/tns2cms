@@ -9,16 +9,19 @@ import (
 	"ibfd.org/tns2cms/stats"
 )
 
+// Processor is the function to process every file
+type Processor func(Filenamer *paths.Filenamer)
+
 // Visitor defines a visitor
 type Visitor struct {
 	rootDirNamer *paths.DirectoryNamer
-	process      func(Filenamer *paths.Filenamer)
+	process      Processor
 	reporter     *stats.Reporter
 }
 
 // NewVisitor creates a directory visitor which scans a directory tree
 // recursively and processes each valid file using the supplied processor.
-func NewVisitor(rootDirNamer *paths.DirectoryNamer, processor func(*paths.Filenamer), reporter *stats.Reporter) *Visitor {
+func NewVisitor(rootDirNamer *paths.DirectoryNamer, processor Processor, reporter *stats.Reporter) *Visitor {
 	return &Visitor{rootDirNamer, processor, reporter}
 }
 
