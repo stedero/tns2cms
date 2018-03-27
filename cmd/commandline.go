@@ -3,9 +3,10 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"os"
+
 	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/paths"
-	"os"
 )
 
 // ParseCommandLine extracts flags and directory names from the command line.
