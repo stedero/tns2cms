@@ -1,31 +1,36 @@
 package cmd
 
 import (
+	"flag"
 	"fmt"
-	"os"
-
 	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/paths"
+	"os"
 )
 
-// ParseCommandLine extracts directory names from the command line.
-func ParseCommandLine() *paths.DirectoryNamer {
-	if len(os.Args) != 3 {
-		usage()
+// ParseCommandLine extracts flags and directory names from the command line.
+func ParseCommandLine() (bool, *paths.DirectoryNamer) {
+	var verbose bool
+	flag.Usage = usage
+	flag.BoolVar(&verbose, "v", false, "verbose output")
+	flag.Parse()
+	if flag.NArg() != 2 {
+		flag.Usage()
 	} else {
-		indir, outdir := os.Args[1], os.Args[2]
+		indir, outdir := flag.Arg(0), flag.Arg(1)
 		if !io.IsExistingDirectory(indir) {
 			fmt.Fprintf(os.Stderr, "%s is not an existing directory\n", indir)
 			exit()
 		}
-		return paths.NewDirectoryNamer(indir, outdir)
+		return verbose, paths.NewDirectoryNamer(indir, outdir)
 	}
-	return nil
+	return false, nil
 }
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
-	fmt.Fprintf(os.Stderr, "\t%s <input directory> <output directory>\n", os.Args[0])
+	fmt.Printf("Usage of %s:\n", os.Args[0])
+	fmt.Printf("\t%s [-v] <input directory> <output directory>\n", os.Args[0])
+	flag.PrintDefaults()
 	exit()
 }
 

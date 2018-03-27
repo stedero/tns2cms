@@ -15,8 +15,8 @@ import (
 )
 
 func main() {
-	directoryNamer := cmd.ParseCommandLine()
-	reporter := stats.NewReporter()
+	verbose, directoryNamer := cmd.ParseCommandLine()
+	reporter := stats.NewReporter(verbose)
 	visitor := exec.NewVisitor(directoryNamer, process, reporter)
 	visitor.Walk()
 	reporter.End()

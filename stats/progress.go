@@ -9,13 +9,14 @@ import (
 
 // Reporter definition
 type Reporter struct {
-	start  time.Time
-	counts []int
+	start   time.Time
+	verbose bool
+	counts  []int
 }
 
 // NewReporter creates a reporter.
-func NewReporter() *Reporter {
-	return &Reporter{time.Now(), make([]int, paths.NumActions)}
+func NewReporter(verbose bool) *Reporter {
+	return &Reporter{time.Now(), verbose, make([]int, paths.NumActions)}
 }
 
 // End reports the termination of the process with counts.
@@ -29,11 +30,13 @@ func (reporter *Reporter) End() {
 // Register an action.
 func (reporter *Reporter) Register(action paths.Action, path string) {
 	reporter.counts[action]++
-	switch action {
-	case paths.RejectDir:
-		log.Printf("skipped directory: %s\n", path)
-	case paths.RejectFile:
-		log.Printf("skipped file: %s\n", path)
-	default:
+	if reporter.verbose {
+		switch action {
+		case paths.RejectDir:
+			log.Printf("skipped directory: %s\n", path)
+		case paths.RejectFile:
+			log.Printf("skipped file: %s\n", path)
+		default:
+		}
 	}
 }
