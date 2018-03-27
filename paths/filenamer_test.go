@@ -23,7 +23,7 @@ func TestInputFilename(t *testing.T) {
 	actual = filepath.ToSlash(fileNamer.OutputFilename())
 	assert(t, expected, actual, "OutputFilename for \"filenamer_test.go\"")
 
-	expected = "/test/outdir/filenamer_test.metadata.properties.xml"
+	expected = "/test/outdir/filenamer_test.go.metadata.properties.xml"
 	actual = filepath.ToSlash(fileNamer.MetaFilename())
 	assert(t, expected, actual, "MetaFilename for \"filenamer_test.go\"")
 }
