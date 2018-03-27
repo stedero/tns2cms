@@ -1,10 +1,11 @@
 package stats
 
 import (
+	"fmt"
+	"github.com/jinzhu/inflection"
+	"ibfd.org/tns2cms/paths"
 	"log"
 	"time"
-
-	"ibfd.org/tns2cms/paths"
 )
 
 // Reporter definition
@@ -22,9 +23,11 @@ func NewReporter(verbose bool) *Reporter {
 // End reports the termination of the process with counts.
 func (reporter *Reporter) End() {
 	elapsed := time.Since(reporter.start)
-	log.Printf("skipped %d directories", reporter.counts[paths.RejectDir])
-	log.Printf("skipped %d files", reporter.counts[paths.RejectFile])
-	log.Printf("processing %d files in %d directories took %s", reporter.counts[paths.AcceptFile], reporter.counts[paths.AcceptDir], elapsed)
+	dirFmt := countFmt("directory")
+	fileFmt := countFmt("file")
+	log.Printf("skipped %s", dirFmt(reporter.counts[paths.RejectDir]))
+	log.Printf("skipped %s", fileFmt(reporter.counts[paths.RejectFile]))
+	log.Printf("processing %s in %s took %s", fileFmt(reporter.counts[paths.AcceptFile]), dirFmt(reporter.counts[paths.AcceptDir]), elapsed)
 }
 
 // Register an action.
@@ -38,5 +41,23 @@ func (reporter *Reporter) Register(action paths.Action, path string) {
 			log.Printf("skipped file: %s\n", path)
 		default:
 		}
+	}
+}
+
+func countFmt(singular string) func(int) string {
+	return func(count int) string {
+		return fmtPluralize(singular, count)
+	}
+}
+
+func fmtPluralize(singular string, count int) string {
+	return fmt.Sprintf("%d %s", count, pluralize(singular, count))
+}
+
+func pluralize(singular string, count int) string {
+	if count == 1 {
+		return singular
+	} else {
+		return inflection.Plural(singular)
 	}
 }
