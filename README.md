@@ -5,7 +5,8 @@ tns2cms adds metadata to TNS articles for bulkload in the Alfresco CMS.
 
 ```
 Usage of tns2cms:
-    tns2cms <input directory> <output directory>
+        tns2cms [-v] <input directory> <output directory>
+  -v    verbose output
 ```
 
 An example of a TNS article:
