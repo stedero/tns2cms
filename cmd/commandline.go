@@ -20,7 +20,7 @@ func ParseCommandLine() (bool, *paths.DirectoryNamer) {
 	} else {
 		indir, outdir := flag.Arg(0), flag.Arg(1)
 		if !io.IsExistingDirectory(indir) {
-			fmt.Fprintf(os.Stderr, "%s is not an existing directory\n", indir)
+			fmt.Printf("%s is not an existing directory\n", indir)
 			exit()
 		}
 		return verbose, paths.NewDirectoryNamer(indir, outdir)
