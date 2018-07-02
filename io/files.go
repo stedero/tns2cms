@@ -6,6 +6,12 @@ import (
 	"os"
 )
 
+// TnsXML info struct.
+type TnsXML struct {
+	FileName string
+	Data     []byte
+}
+
 // IsExistingDirectory determines whether a given directory
 // is an existing directory.
 func IsExistingDirectory(dir string) bool {
@@ -27,12 +33,12 @@ func CreateDirIfNotExist(dir string) {
 
 // ReadFile reads an entire file into memory. If an error occurs then
 // the program terminates with a panic message.
-func ReadFile(filename string) []byte {
+func ReadFile(filename string) *TnsXML {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatalf("fail to read file %s: %v", filename, err)
 	}
-	return data
+	return &TnsXML{filename, data}
 }
 
 // WriteFile writes data to a file named by filename.

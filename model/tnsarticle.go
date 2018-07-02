@@ -3,6 +3,8 @@ package model
 import (
 	"encoding/xml"
 	"log"
+
+	"ibfd.org/tns2cms/io"
 )
 
 // TnsArticle defines the XML structure of a
@@ -44,11 +46,11 @@ type TnsArticle struct {
 }
 
 // NewTnsArticle transforms a TNS article in XML into an internal structure.
-func NewTnsArticle(data []byte) *TnsArticle {
+func NewTnsArticle(tnsXML *io.TnsXML) *TnsArticle {
 	var tnsArticle TnsArticle
-	err := xml.Unmarshal(data, &tnsArticle)
+	err := xml.Unmarshal(tnsXML.Data, &tnsArticle)
 	if err != nil {
-		log.Fatalf("error unmarshaling TNS article: %v", err)
+		log.Fatalf("error unmarshaling TNS article %s: %v", tnsXML.FileName, err)
 	}
 	tnsArticle.addDTDDefaults()
 	return &tnsArticle
