@@ -26,6 +26,7 @@ func process(fileNamer *paths.Filenamer) {
 	tnsXML := io.ReadFile(fileNamer.InputFilename())
 	io.WriteFile(fileNamer.OutputFilename(), tnsXML.Data)
 	tnsArticle := model.NewTnsArticle(tnsXML)
-	metaXML := model.NewMetaData(tnsArticle)
-	io.WriteFile(fileNamer.MetaFilename(), metaXML)
+	metaData := model.NewMetaData(tnsArticle)
+	metaFile := io.OpenFile(fileNamer.MetaFilename())
+	metaData.WriteXML(metaFile)
 }

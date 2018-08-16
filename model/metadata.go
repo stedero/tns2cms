@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/xml"
 	"fmt"
+	"io"
 	"log"
 	"strings"
 	"time"
@@ -10,8 +11,8 @@ import (
 
 const metaDataDoctype = "<!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\">\n"
 
-// Properties element for marshaling to XML
-type Properties struct {
+// MetaData element for marshaling to XML
+type MetaData struct {
 	XMLName xml.Name `xml:"properties"`
 	Entries []Entry  `xml:"entry"`
 }
@@ -25,29 +26,37 @@ type Entry struct {
 const multiValueJoiner = ","
 const metaNameSpace = "ibfd:"
 
-// NewMetaData transforms a TNS article into meta data XML.
-func NewMetaData(tnsArticle *TnsArticle) []byte {
-	var props Properties
-	props.add("type", "cm:content")
-	props.add("id", tnsArticle.GUID)
-	props.add("created", tnsArticle.TnsArticleInfo.ArticleDate.IsoDate)
-	props.add("report_type", tnsArticle.ReportType)
-	props.add("collection", tnsArticle.Collection)
-	props.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
-	props.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
-	props.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
-	props.add("country_codes", mapJoin(countryCode(tnsArticle)))
-	props.add("country_names", mapJoin(countryName(tnsArticle)))
-	props.add("xrefs", mapJoin(reference(tnsArticle)))
-	xmlMeta, err := xml.MarshalIndent(&props, "", "    ")
-	if err != nil {
-		log.Fatalf("error marshaling TNS article %s to XML: %v", tnsArticle.GUID, err)
-	}
-	return []byte(xml.Header + nowAsComment() + metaDataDoctype + string(xmlMeta))
+// NewMetaData transforms a TNS article into a meta data structure.
+func NewMetaData(tnsArticle *TnsArticle) *MetaData {
+	metaData := &MetaData{}
+	metaData.add("type", "cm:content")
+	metaData.add("id", tnsArticle.GUID)
+	metaData.add("created", tnsArticle.TnsArticleInfo.ArticleDate.IsoDate)
+	metaData.add("report_type", tnsArticle.ReportType)
+	metaData.add("collection", tnsArticle.Collection)
+	metaData.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
+	metaData.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
+	metaData.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
+	metaData.add("country_codes", mapJoin(countryCode(tnsArticle)))
+	metaData.add("country_names", mapJoin(countryName(tnsArticle)))
+	metaData.add("xrefs", mapJoin(reference(tnsArticle)))
+	return metaData
 }
 
-func (p *Properties) add(key string, value string) {
-	p.Entries = append(p.Entries, Entry{metaNameSpace + key, value})
+// WriteXML writes the metadata as XML.
+func (m *MetaData) WriteXML(w io.Writer) {
+	w.Write([]byte(xml.Header))
+	w.Write([]byte(nowAsComment()))
+	w.Write([]byte(metaDataDoctype))
+	encoder := xml.NewEncoder(w)
+	err := encoder.Encode(m)
+	if err != nil {
+		log.Fatalf("error encoding XML: %v", err)
+	}
+}
+
+func (m *MetaData) add(key string, value string) {
+	m.Entries = append(m.Entries, Entry{metaNameSpace + key, value})
 }
 
 func nowAsComment() string {

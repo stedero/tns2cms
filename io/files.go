@@ -51,3 +51,13 @@ func WriteFile(filename string, data []byte) {
 		log.Fatalf("fail to write file %s: %v", filename, err)
 	}
 }
+
+// OpenFile creates a file for writing.
+// If an error occurs then the program terminates with a panic message.
+func OpenFile(filename string) *os.File {
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatalf("failed to create file %s: %v", filename, err)
+	}
+	return file
+}
