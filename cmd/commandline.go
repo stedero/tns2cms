@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/paths"
+	"ibfd.org/tns2cms/tio"
 )
 
 // ParseCommandLine extracts flags and directory names from the command line.
@@ -19,7 +19,7 @@ func ParseCommandLine() (bool, *paths.DirectoryNamer) {
 		flag.Usage()
 	} else {
 		indir, outdir := flag.Arg(0), flag.Arg(1)
-		if !io.IsExistingDirectory(indir) {
+		if !tio.IsExistingDirectory(indir) {
 			fmt.Printf("%s is not an existing directory\n", indir)
 			exit()
 		}

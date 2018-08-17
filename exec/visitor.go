@@ -4,9 +4,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/paths"
 	"ibfd.org/tns2cms/stats"
+	"ibfd.org/tns2cms/tio"
 )
 
 // Processor is the function to process every file
@@ -43,7 +43,7 @@ func (visitor *Visitor) walker() func(string, os.FileInfo, error) error {
 			visitor.process(fileNamer)
 		case paths.AcceptDir:
 			dest := rootDirNamer.NewOutdirName(path)
-			io.CreateDirIfNotExist(dest)
+			tio.CreateDirIfNotExist(dest)
 		case paths.RejectDir:
 			return filepath.SkipDir
 		case paths.RejectFile:

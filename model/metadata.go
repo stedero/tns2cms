@@ -49,6 +49,7 @@ func (m *MetaData) WriteXML(w io.Writer) {
 	w.Write([]byte(nowAsComment()))
 	w.Write([]byte(metaDataDoctype))
 	encoder := xml.NewEncoder(w)
+	encoder.Indent("", "   ")
 	err := encoder.Encode(m)
 	if err != nil {
 		log.Fatalf("error encoding XML: %v", err)

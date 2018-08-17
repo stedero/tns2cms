@@ -8,10 +8,10 @@ package main
 import (
 	"ibfd.org/tns2cms/cmd"
 	"ibfd.org/tns2cms/exec"
-	"ibfd.org/tns2cms/io"
 	"ibfd.org/tns2cms/model"
 	"ibfd.org/tns2cms/paths"
 	"ibfd.org/tns2cms/stats"
+	"ibfd.org/tns2cms/tio"
 )
 
 func main() {
@@ -23,10 +23,11 @@ func main() {
 }
 
 func process(fileNamer *paths.Filenamer) {
-	tnsXML := io.ReadFile(fileNamer.InputFilename())
-	io.WriteFile(fileNamer.OutputFilename(), tnsXML.Data)
-	tnsArticle := model.NewTnsArticle(tnsXML)
+	tnsReader := tio.NewTnsReader(fileNamer.InputFilename(), fileNamer.OutputFilename())
+	defer tnsReader.Close()
+	tnsArticle := model.ReadTnsArticle(tnsReader)
 	metaData := model.NewMetaData(tnsArticle)
-	metaFile := io.OpenFile(fileNamer.MetaFilename())
+	metaFile := tio.CreateFile(fileNamer.MetaFilename())
+	defer metaFile.Close()
 	metaData.WriteXML(metaFile)
 }
