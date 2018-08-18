@@ -39,11 +39,12 @@ func (visitor *Visitor) walker() func(string, os.FileInfo, error) error {
 		defer reporter.Register(action, path)
 		switch action {
 		case paths.AcceptFile:
+			reporter.CreatedFiles(2) // We create 2 new files for every inputfile.
 			fileNamer := paths.NewFilenamer(rootDirNamer, path, fileInfo)
 			visitor.process(fileNamer)
 		case paths.AcceptDir:
 			dest := rootDirNamer.NewOutdirName(path)
-			tio.CreateDirIfNotExist(dest)
+			reporter.CreatedDir(tio.CreateDirIfNotExist(dest))
 		case paths.RejectDir:
 			return filepath.SkipDir
 		case paths.RejectFile:

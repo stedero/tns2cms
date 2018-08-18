@@ -29,13 +29,15 @@ func IsExistingDirectory(dir string) bool {
 // CreateDirIfNotExist creates a directory if it does not
 // exist yet. If an error occurs then the program terminates
 // with a panic message.
-func CreateDirIfNotExist(dir string) {
+func CreateDirIfNotExist(dir string) bool {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err := os.MkdirAll(dir, 0755)
 		if err != nil {
 			log.Fatalf("fail to create directory %s: %v", dir, err)
 		}
+		return true
 	}
+	return false
 }
 
 // NewTnsReader creates a reader that copies the output when reading.
@@ -46,8 +48,8 @@ func NewTnsReader(inputFilename, outputFilename string) *TnsReader {
 	return &TnsReader{reader, writer, teeReader}
 }
 
-func (tnsReader *TnsReader) Read(p []byte) (n int, err error) {
-	return tnsReader.teeReader.Read(p)
+func (tr *TnsReader) Read(p []byte) (n int, err error) {
+	return tr.teeReader.Read(p)
 }
 
 // OpenFile opens a file for reading.
