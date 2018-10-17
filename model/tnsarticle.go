@@ -25,8 +25,8 @@ type TnsArticle struct {
 			Score       string `xml:"score,attr"`
 			Description string `xml:",innerxml"`
 		} `xml:"topics>topic"`
-		OnlinetTitle string `xml:"onlinetitle"`
-		ArticleDate  struct {
+		OnlineTitle string `xml:"onlinetitle"`
+		ArticleDate struct {
 			IsoDate   string `xml:"isodate,attr"`
 			HumanDate string `xml:",innerxml"`
 		} `xml:"articledate"`

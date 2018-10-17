@@ -20,7 +20,7 @@ type MetaData struct {
 // Entry element for marshaling to XML
 type Entry struct {
 	Key   string `xml:"key,attr"`
-	Value string `xml:",innerxml"`
+	Value string `xml:",chardata"`
 }
 
 const multiValueJoiner = ","
@@ -29,17 +29,22 @@ const metaNameSpace = "ibfd:"
 // NewMetaData transforms a TNS article into a meta data structure.
 func NewMetaData(tnsArticle *TnsArticle) *MetaData {
 	metaData := &MetaData{}
-	metaData.add("type", "cm:content")
-	metaData.add("id", tnsArticle.GUID)
-	metaData.add("created", tnsArticle.TnsArticleInfo.ArticleDate.IsoDate)
-	metaData.add("report_type", tnsArticle.ReportType)
-	metaData.add("collection", tnsArticle.Collection)
-	metaData.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
-	metaData.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
-	metaData.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
-	metaData.add("country_codes", mapJoin(countryCode(tnsArticle)))
-	metaData.add("country_names", mapJoin(countryName(tnsArticle)))
-	metaData.add("xrefs", mapJoin(reference(tnsArticle)))
+	metaData.add("type", "ibfd:onlinecontent")
+	metaData.add("aspects", "ibfd:onlineContentProperties,cm:titled,ibfd:published")
+	metaData.add("cm:title", tnsArticle.TnsArticleInfo.OnlineTitle)
+	metaData.add("ibfd:collectionCode", "tns")
+	metaData.add("ibfd:collectionCodeHumanReadable", "Tax News service")
+	metaData.add("ibfd:publicationDate", formatDate(tnsArticle.TnsArticleInfo.ArticleDate.IsoDate))
+
+	// metaData.add("id", tnsArticle.GUID)
+	// metaData.add("report_type", tnsArticle.ReportType)
+	// metaData.add("ibfd:collectionCode", tnsArticle.Collection)
+	// metaData.add("title", tnsArticle.TnsArticleInfo.OnlinetTitle)
+	// metaData.add("author_initials", tnsArticle.TnsArticleInfo.Author.Initials)
+	// metaData.add("main_cc", tnsArticle.TnsArticleInfo.CountryList.Main)
+	// metaData.add("country_codes", mapJoin(countryCode(tnsArticle)))
+	// metaData.add("country_names", mapJoin(countryName(tnsArticle)))
+	// metaData.add("xrefs", mapJoin(reference(tnsArticle)))
 	return metaData
 }
 
@@ -57,7 +62,7 @@ func (m *MetaData) WriteXML(w io.Writer) {
 }
 
 func (m *MetaData) add(key string, value string) {
-	m.Entries = append(m.Entries, Entry{metaNameSpace + key, value})
+	m.Entries = append(m.Entries, Entry{key, value})
 }
 
 func nowAsComment() string {
@@ -95,4 +100,8 @@ func writeString(w io.Writer, s string) {
 	if err != nil {
 		log.Fatalf("error writing %s: %v", s, err)
 	}
+}
+
+func formatDate(date string) string {
+	return date[:4] + "-" + date[4:6] + "-" + date[6:8] + "T00:00:00.000+02:00"
 }
