@@ -103,5 +103,5 @@ func writeString(w io.Writer, s string) {
 }
 
 func formatDate(date string) string {
-	return date[:4] + "-" + date[4:6] + "-" + date[6:8] + "T00:00:00.000+02:00"
+	return fmt.Sprintf("%s-%s-%sT00:00:00.000+02:00", date[:4], date[4:6], date[6:8])
 }
