@@ -30,7 +30,8 @@ type Filenamer struct {
 // NewFilenamer creates a filenamer from root directory info.
 func NewFilenamer(rootDirNamer *DirectoryNamer, currentPath string, fileInfo os.FileInfo) *Filenamer {
 	source := strings.TrimSuffix(currentPath, fileInfo.Name())
-	part := strings.TrimPrefix(source, rootDirNamer.InDir())
+	inDir := strings.TrimPrefix(source, rootDirNamer.InDir())
+	part := subdirName(strings.TrimSuffix(inDir, "\\"))
 	dest := filepath.Join(rootDirNamer.OutDir(), part)
 	return &Filenamer{*NewDirectoryNamer(source, dest), fileInfo.Name()}
 }
